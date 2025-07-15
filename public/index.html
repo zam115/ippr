@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Captura IP</title>
+</head>
+<body>
+  <h2>Haz clic para registrar tu IP:</h2>
+  <a href="#" id="ipLink">Capturar IP</a>
+
+  <script>
+    document.getElementById("ipLink").addEventListener("click", function (e) {
+      e.preventDefault();
+      fetch("https://api.ipify.org?format=json")
+        .then(res => res.json())
+        .then(data => {
+          const ip = data.ip;
+          console.log("Tu IP:", ip);
+
+          fetch("/guardar-ip", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ip })
+          })
+          .then(res => res.text())
+          .then(msg => alert(msg))
+          .catch(err => console.error("Error:", err));
+        });
+    });
+  </script>
+</body>
+</html>
